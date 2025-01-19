@@ -7,12 +7,12 @@ public class MovableItem : MonoBehaviour
     public string FruitName;
     public float backduration = 3f;
     public PlacementPlatform _sp;
-    public float height = 1.5f; // Geri dönüş yay yüksekliği
+    public float height = 1.5f;
     public Animator myAnimator;
 
     [Header("Drag & Throw Settings")]
-    public float flingMaxSpeed = 0.5f;       // Bıraktıktan sonraki maksimum hız
-    public float backForceMultiplier = 0.3f; // Geri fırlatma gücü çarpanı (mismatch durumunda)
+    public float flingMaxSpeed = 0.5f;
+    public float backForceMultiplier = 0.3f;
 
     [Header("Game Area Bounds")]
     public Vector3 minBoundary = new Vector3(-8.26f, -3.80f, -7.20f);
@@ -29,7 +29,6 @@ public class MovableItem : MonoBehaviour
     private float elapsedTime = 0;
     private bool isBack = false;
 
-    // Sabit bir Y düzleminde sürüklemek için plane
     private Plane dragPlane;
     private float initialY;
 
@@ -44,7 +43,6 @@ public class MovableItem : MonoBehaviour
         initialY = transform.position.y;
         startposition = transform.position;
 
-        // Nesneyi sabit bir Y düzleminde sürüklemek için Plane:
         dragPlane = new Plane(Vector3.up, new Vector3(0, initialY, 0));
     }
 
@@ -52,18 +50,12 @@ public class MovableItem : MonoBehaviour
     {
         if (isBack)
         {
-            // “isBack” durumunda nesneyi bir yay eğrisi ile geri taşıyoruz:
             if (elapsedTime < backduration)
             {
                 elapsedTime += Time.deltaTime;
                 float t = elapsedTime / backduration;
-
-                // Sadece x-z ekseninde lineer interpolasyon
                 Vector3 horizontalPosition = Vector3.Lerp(transform.position, startposition, t);
-
-                // Y ekseninde küçük bir yay oluştur
                 float arc = Mathf.Sin(t * Mathf.PI) * height;
-
                 transform.position = new Vector3(
                     horizontalPosition.x,
                     horizontalPosition.y + arc,
@@ -72,11 +64,8 @@ public class MovableItem : MonoBehaviour
             }
             else
             {
-                // Yay hareketi bittiğinde tekrar fizik kontrolü ver
                 rb.isKinematic = false;
-                // Saklanan velocity'yi geri ver (çarpan uygulanmış hâlini)
                 rb.linearVelocity = velocityBeforeKinematic;
-
                 isBack = false;
                 elapsedTime = 0;
             }
@@ -93,28 +82,20 @@ public class MovableItem : MonoBehaviour
     {
         if (isDragging)
         {
-            // Kamera ekranındaki mouse konumundan Ray
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             if (dragPlane.Raycast(ray, out float enter))
             {
-                // Ray'in düzlemle kesiştiği noktayı bulalım
                 Vector3 hitPoint = ray.GetPoint(enter);
-
-                // Y sabit olsun (plane zaten y=initialY diyor, ama yine de set edebiliriz)
                 hitPoint.y = initialY;
 
-                // Oyun alanı sınırlarını uygula (x,z)
-                // İstersen bu "1f, 1f, 2f" offsetlerini kaldırabilir ya da değiştirebilirsin
                 Vector3 adjustedMinBoundary = minBoundary + new Vector3(1f, 1f, 2f);
                 Vector3 adjustedMaxBoundary = maxBoundary - new Vector3(1f, 1f, 2f);
 
                 hitPoint.x = Mathf.Clamp(hitPoint.x, adjustedMinBoundary.x, adjustedMaxBoundary.x);
                 hitPoint.z = Mathf.Clamp(hitPoint.z, adjustedMinBoundary.z, adjustedMaxBoundary.z);
 
-                // Kinematik RB'nin MovePosition’u ile nesneyi taşı
                 rb.MovePosition(hitPoint);
 
-                // Sürükleme efekti
                 if (dragEffect && !dragEffect.isPlaying)
                 {
                     dragEffect.Play();
@@ -128,7 +109,6 @@ public class MovableItem : MonoBehaviour
         isDragging = false;
         rb.isKinematic = false;
 
-        // Bıraktıktan sonra hızını sınırla
         Vector3 newVelocity = rb.linearVelocity;
         if (newVelocity.magnitude > flingMaxSpeed)
         {
@@ -136,7 +116,6 @@ public class MovableItem : MonoBehaviour
         }
         rb.linearVelocity = newVelocity;
 
-        // Sürükleme efekti
         if (dragEffect && dragEffect.isPlaying)
         {
             dragEffect.Stop();
@@ -155,7 +134,7 @@ public class MovableItem : MonoBehaviour
             }
             else if (_sp.CurrentFruit != this && _sp.CurrentFruit.FruitName == this.FruitName)
             {
-                // 🟢 Eşleşme Durumu
+                // Eşleşme
                 if (myAnimator != null)
                     myAnimator.SetTrigger("OnMatch");
 
@@ -169,10 +148,8 @@ public class MovableItem : MonoBehaviour
                 _sp.CurrentFruit.gameObject.layer = 6;
 
                 _sp.CurrentFruit = null;
-
                 _sp.AddScore();
 
-                // Eşleşme efekti
                 if (_sp.matchParticleEffect)
                 {
                     ParticleSystem effect = Instantiate(_sp.matchParticleEffect, transform.position, Quaternion.identity);
@@ -182,11 +159,10 @@ public class MovableItem : MonoBehaviour
 
                 // Meyveleri yok et
                 Destroy(gameObject);
-                Destroy(_sp.CurrentFruit.gameObject);
             }
             else if (_sp.CurrentFruit != this && _sp.CurrentFruit.FruitName != this.FruitName)
             {
-                // ❌ Eşleşme yoksa geri git
+                // Eşleşme yoksa geri git
                 isBack = true;
                 velocityBeforeKinematic = rb.linearVelocity * backForceMultiplier;
                 rb.isKinematic = true;
@@ -200,5 +176,31 @@ public class MovableItem : MonoBehaviour
         {
             _sp.CurrentFruit = null;
         }
+    }
+
+    /// <summary>
+    /// Nesneyi sin dalgası kullanarak kısa bir zıplama hareketi yaptırır (örnek).
+    /// </summary>
+    public System.Collections.IEnumerator Jump(float jumpHeight, float totalTime)
+    {
+        float elapsed = 0f;
+        Vector3 startPos = transform.position;
+
+        while (elapsed < totalTime)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / totalTime;
+
+            float arc = Mathf.Sin(t * Mathf.PI) * jumpHeight;
+            transform.position = new Vector3(
+                startPos.x,
+                startPos.y + arc,
+                startPos.z
+            );
+
+            yield return null;
+        }
+
+        transform.position = startPos;
     }
 }
