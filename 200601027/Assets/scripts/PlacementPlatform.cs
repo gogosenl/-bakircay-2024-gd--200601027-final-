@@ -28,14 +28,14 @@ public class PlacementPlatform : MonoBehaviour
         guiStyle.fontSize = 30;
 
         // 2X Skor Butonu
-        if (GUI.Button(new Rect(50, 50, 150, 50), "2X Skor", guiStyle))
+        if (GUI.Button(new Rect(50, 800, 150, 50), "2X Skor", guiStyle))
         {
             isDoubleScoreActive = true;
             scoreMultiplier = 2; // 2X Skor Aktif
         }
 
         // [ÖRNEK] Göster Butonu (daha önce eklediğiniz)
-        if (GUI.Button(new Rect(220, 50, 150, 50), "Göster", guiStyle))
+        if (GUI.Button(new Rect(220, 800, 150, 50), "Göster", guiStyle))
         {
             StartCoroutine(JumpOnePair()); // Örnek: Sadece 1 çifti zıplatıyor
         }
@@ -43,7 +43,7 @@ public class PlacementPlatform : MonoBehaviour
         // =====================================================
         //  1) BÜYÜT BUTONU - Tüm nesneleri 5sn boyunca 2 katı yap
         // =====================================================
-        if (GUI.Button(new Rect(50, 110, 150, 50), "Büyüt", guiStyle))
+        if (GUI.Button(new Rect(220, 900, 150, 50), "Büyüt", guiStyle))
         {
             // Tüm MovableItem nesneleri 2 katına büyütelim, 5 saniye bekleyip geri alalım
             StartCoroutine(ScaleAllItems(2f, 5f));
@@ -52,12 +52,12 @@ public class PlacementPlatform : MonoBehaviour
         // =====================================================
         //  2) KARIŞTIR BUTONU - Tüm nesnelerin pozisyonunu rastgele dağıt
         // =====================================================
-        if (GUI.Button(new Rect(50, 170, 150, 50), "Karıştır", guiStyle))
+        if (GUI.Button(new Rect(50, 900, 150, 50), "Karıştır", guiStyle))
         {
             ShuffleAllItems();
         }
 
-        if (GUI.Button(new Rect(220, 110, 230, 50), "Yeniden Başlat", guiStyle))
+        if (GUI.Button(new Rect(700, 50, 230, 50), "Yeniden Başlat", guiStyle))
         {
             ResetGame();
         }
