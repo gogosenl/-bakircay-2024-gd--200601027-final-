@@ -23,15 +23,16 @@ https://play.unity.com/en/games/e41649dc-10f8-4104-814c-f1218bc2570a/gorkem-seno
 - Yeniden başlat butonuna tıklanırsa oyun yeniden başlar.
 
 ## Yetenekler (Skiller)
--2x Skill:
+- 2x Skill:
 Kullanıldığında oyuncu ilk eşleşmede 20 puan kazanır.
--Büyüt Skill:
+- Büyüt Skill:
 Etkinleştirildiğinde, tüm nesneler 2 saniye boyunca 1.5 katına büyür ve daha belirgin hale gelir.
--Nesneleri Topla Skill:
+- Nesneleri Topla Skill:
 Tüm oyun alanındaki nesneleri dairesel bir şekilde tek bir alana toplar.
--İpucu Skill:
+- İpucu Skill:
 Oyuncuya, oyun alanında bulunan ve eşleşme yapabilecek bir çift nesneyi gösterir.
-Skill Kullanımı:
+
+- Skill Kullanımı:
 Her skill, oyun alanında bir buton ile etkinleştirilebilir.
 Skiller 5 saniye bekleme sürelerine sahiptir.
 
