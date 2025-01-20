@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Linq;
+using System.Collections.Generic;
 
 public class PlacementPlatform : MonoBehaviour
 {
@@ -18,9 +19,11 @@ public class PlacementPlatform : MonoBehaviour
     [Header("Particles & Skills")]
     public ParticleSystem matchParticleEffect;
 
-    // 2X Skor değişkenleri
     private bool isDoubleScoreActive = false;
-    private int scoreMultiplier = 1; // Başlangıçta normal skor
+    private int scoreMultiplier = 10;
+
+    private Dictionary<string, float> buttonCooldowns = new Dictionary<string, float>();
+    private float cooldownTime = 5f;
 
     void OnGUI()
     {
@@ -28,31 +31,26 @@ public class PlacementPlatform : MonoBehaviour
         guiStyle.fontSize = 30;
 
         // 2X Skor Butonu
-        if (GUI.Button(new Rect(50, 800, 150, 50), "2X Skor", guiStyle))
+        if (DrawButtonWithCooldown("2X Skor", new Rect(50, 750, 150, 100), guiStyle))
         {
             isDoubleScoreActive = true;
-            scoreMultiplier = 2; // 2X Skor Aktif
+            scoreMultiplier = 20; // 2X Skor Aktif
         }
 
-        // [ÖRNEK] Göster Butonu (daha önce eklediğiniz)
-        if (GUI.Button(new Rect(220, 800, 150, 50), "Göster", guiStyle))
+        // İpucu Butonu
+        if (DrawButtonWithCooldown("İpucu", new Rect(220, 750, 150, 100), guiStyle))
         {
-            StartCoroutine(JumpOnePair()); // Örnek: Sadece 1 çifti zıplatıyor
+            StartCoroutine(JumpOnePair());
         }
 
-        // =====================================================
-        //  1) BÜYÜT BUTONU - Tüm nesneleri 5sn boyunca 2 katı yap
-        // =====================================================
-        if (GUI.Button(new Rect(220, 900, 150, 50), "Büyüt", guiStyle))
+        // Büyüt Butonu
+        if (DrawButtonWithCooldown("Büyüt", new Rect(50, 900, 150, 100), guiStyle))
         {
-            // Tüm MovableItem nesneleri 2 katına büyütelim, 5 saniye bekleyip geri alalım
-            StartCoroutine(ScaleAllItems(2f, 5f));
+            StartCoroutine(ScaleAllItems(1.5f, 2f));
         }
 
-        // =====================================================
-        //  2) KARIŞTIR BUTONU - Tüm nesnelerin pozisyonunu rastgele dağıt
-        // =====================================================
-        if (GUI.Button(new Rect(50, 900, 150, 50), "Karıştır", guiStyle))
+        // Karıştır Butonu
+        if (DrawButtonWithCooldown("Nesneleri Topla", new Rect(220, 900, 230, 100), guiStyle))
         {
             ShuffleAllItems();
         }
@@ -61,13 +59,31 @@ public class PlacementPlatform : MonoBehaviour
         {
             ResetGame();
         }
-
     }
 
-    /// <summary>
-    /// (Örneğin) Sahnede ilk bulduğu (FruitName'i aynı olan) 2 nesneyi 1 saniye zıplatan eski bir örnek fonksiyon.
-    /// Siz kendi projenizde bunun içeriğini değiştirmiş olabilirsiniz.
-    /// </summary>
+    private bool DrawButtonWithCooldown(string buttonName, Rect rect, GUIStyle guiStyle)
+    {
+        if (!buttonCooldowns.ContainsKey(buttonName))
+        {
+            buttonCooldowns[buttonName] = 0f;
+        }
+
+        if (buttonCooldowns[buttonName] > Time.time)
+        {
+            float remainingTime = buttonCooldowns[buttonName] - Time.time;
+            GUI.Button(rect, $"{buttonName}\n({Mathf.CeilToInt(remainingTime)})", guiStyle);
+            return false;
+        }
+
+        if (GUI.Button(rect, buttonName, guiStyle))
+        {
+            buttonCooldowns[buttonName] = Time.time + cooldownTime;
+            return true;
+        }
+
+        return false;
+    }
+
     private IEnumerator JumpOnePair()
     {
         MovableItem[] allItems = FindObjectsOfType<MovableItem>();
@@ -78,7 +94,6 @@ public class PlacementPlatform : MonoBehaviour
             var items = group.ToList();
             if (items.Count >= 2)
             {
-                // Yalnızca ilk 2 taneyi zıplat
                 items[0].StartCoroutine(items[0].Jump(1f, 1f));
                 items[1].StartCoroutine(items[1].Jump(1f, 1f));
                 break;
@@ -88,68 +103,51 @@ public class PlacementPlatform : MonoBehaviour
         yield return null;
     }
 
-    //------------------------------------------------------------------------
-    //      1) BÜYÜTME COROUTINE
-    //------------------------------------------------------------------------
     private IEnumerator ScaleAllItems(float scaleFactor, float duration)
     {
-        // Tüm MovableItem'ları bul
         MovableItem[] allItems = FindObjectsOfType<MovableItem>();
-
-        // Orijinal scale'ları saklamak için dizi
         Vector3[] originalScales = new Vector3[allItems.Length];
 
-        // 1) Hepsinin orijinal scale'ını sakla, sonra scaleFactor ile çarp
         for (int i = 0; i < allItems.Length; i++)
         {
             originalScales[i] = allItems[i].transform.localScale;
             allItems[i].transform.localScale = originalScales[i] * scaleFactor;
         }
 
-        // 2) duration (5sn) bekle
         yield return new WaitForSeconds(duration);
 
-        // 3) Scale'ları geri al
         for (int i = 0; i < allItems.Length; i++)
         {
-            if (allItems[i] != null) // Nesne bu arada yok edilmiş olabilir
+            if (allItems[i] != null)
             {
                 allItems[i].transform.localScale = originalScales[i];
             }
         }
     }
 
-    //------------------------------------------------------------------------
-    //      2) KARIŞTIR
-    //------------------------------------------------------------------------
     private void ShuffleAllItems()
     {
         MovableItem[] allItems = FindObjectsOfType<MovableItem>();
+        Vector3 center = new Vector3(-2f, 0f, -3f);
+        float radius = 1.5f;
 
-        foreach (MovableItem item in allItems)
+        for (int i = 0; i < allItems.Length; i++)
         {
-            // RB varsa hızını sıfırlayalım (sağa sola kaymasın diye)
-            if (item.TryGetComponent<Rigidbody>(out Rigidbody rb))
+            float angle = i * Mathf.PI * 2 / allItems.Length;
+            float x = center.x + Mathf.Cos(angle) * radius;
+            float z = center.z + Mathf.Sin(angle) * radius;
+            Vector3 newPos = new Vector3(x, allItems[i].transform.position.y, z);
+
+            if (allItems[i].TryGetComponent<Rigidbody>(out Rigidbody rb))
             {
                 rb.linearVelocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
             }
 
-            // min / max sınırları MovableItem içinden veya sabit bir yerden alabilirsiniz.
-            // Örnek olarak, MovableItem içerisindeki minBoundary & maxBoundary değerini kullanabiliriz.
-            // DİKKAT: item'in "minBoundary" vb. static değilse her item için farklı olabilir.
-            Vector3 randomPos = new Vector3(
-                Random.Range(item.minBoundary.x, item.maxBoundary.x),
-                item.transform.position.y,
-                Random.Range(item.minBoundary.z, item.maxBoundary.z)
-            );
-
-            // Yeni rastgele konumu ver
-            item.transform.position = randomPos;
+            allItems[i].transform.position = newPos;
         }
     }
 
-    // Mevcut AddScore, ResetGame vs. kısımları aşağıda
     public void AddScore()
     {
         Score += 1 * scoreMultiplier;
@@ -159,11 +157,11 @@ public class PlacementPlatform : MonoBehaviour
 
         if (matchCount == totalPairs)
         {
-            TotalScore = Score; // Skoru sakla
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Sahneyi yeniden başlat
+            TotalScore = Score;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-        scoreMultiplier = 1;
+        scoreMultiplier = 10;
         isDoubleScoreActive = false;
     }
 

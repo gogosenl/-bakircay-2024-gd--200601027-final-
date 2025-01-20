@@ -131,6 +131,9 @@ public class MovableItem : MonoBehaviour
             if (_sp.CurrentFruit == null)
             {
                 _sp.CurrentFruit = this;
+                isDragging = true;
+                // Kinematik mod açık, nesne fizikten etkilenmesin.
+                rb.isKinematic = true;
             }
             else if (_sp.CurrentFruit != this && _sp.CurrentFruit.FruitName == this.FruitName)
             {
