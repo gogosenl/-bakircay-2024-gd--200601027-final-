@@ -119,7 +119,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 109
+  controlID: 104
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -167,7 +167,7 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 997.3333
-    height: 508.66666
+    height: 441.33334
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
@@ -191,7 +191,7 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 214
-    height: 508.66666
+    height: 441.33334
   m_MinSize: {x: 201, y: 226}
   m_MaxSize: {x: 4001, y: 4026}
   m_ActualView: {fileID: 12}
@@ -217,7 +217,7 @@ MonoBehaviour:
     x: 214
     y: 0
     width: 783.3333
-    height: 508.66666
+    height: 441.33334
   m_MinSize: {x: 202, y: 226}
   m_MaxSize: {x: 4002, y: 4026}
   m_ActualView: {fileID: 14}
@@ -242,9 +242,9 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 508.66666
+    y: 441.33334
     width: 997.3333
-    height: 50.00003
+    height: 117.33334
   m_MinSize: {x: 231, y: 276}
   m_MaxSize: {x: 10001, y: 10026}
   m_ActualView: {fileID: 15}
@@ -303,7 +303,7 @@ MonoBehaviour:
     x: 7.3333335
     y: -634
     width: 213
-    height: 482.66666
+    height: 415.33334
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -318,23 +318,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 32800000
+      m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: d0faffff
+      m_ExpandedIDs: 425dffff8a5effff0261ffffee69ffff2c6bffffd66dffffd0faffff62a70000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: piggy_bank (1)
+        m_OriginalName: piggy_bank (1)
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 0
+        m_UserData: 42962
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 0
         m_IsRenamingFilename: 0
         m_TrimLeadingAndTrailingWhitespace: 0
         m_ClientGUIView: {fileID: 8}
@@ -1005,7 +1005,7 @@ MonoBehaviour:
     x: 221.33334
     y: -634
     width: 781.3333
-    height: 482.66666
+    height: 415.33334
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1060,22 +1060,22 @@ MonoBehaviour:
       x: 0
       y: 21
       width: 781.3333
-      height: 461.66666
-    m_Scale: {x: 0.61041665, y: 0.61041665}
-    m_Translation: {x: 390.66666, y: 230.83334}
+      height: 394.33334
+    m_Scale: {x: 0.5476852, y: 0.5476852}
+    m_Translation: {x: 390.66666, y: 197.16667}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -640
-      y: -378.157
-      width: 1280
-      height: 756.314
+      x: -713.3051
+      y: -360
+      width: 1426.6102
+      height: 720
     m_MinimalGUI: 1
-  m_defaultScale: 0.61041665
-  m_LastWindowPixelSize: {x: 1172, y: 724}
+  m_defaultScale: 0.5476852
+  m_LastWindowPixelSize: {x: 1172, y: 623}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000000000000000000
@@ -1103,9 +1103,9 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 7.3333335
-    y: -125.33331
+    y: -192.66663
     width: 996.3333
-    height: 24.00003
+    height: 91.33334
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1144,10 +1144,10 @@ MonoBehaviour:
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 443.99997}
-    m_SelectedIDs: b0ab0000
-    m_LastClickedID: 43952
-    m_ExpandedIDs: 000000003cab00003eab000040ab0000a2ab0000baab0000bcab000000ca9a3b
+    scrollPos: {x: 0, y: 152.66666}
+    m_SelectedIDs: b6ab0000
+    m_LastClickedID: 43958
+    m_ExpandedIDs: 000000003cab00003eab000040ab000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1286,7 +1286,7 @@ MonoBehaviour:
   m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
     m_Text: Inspector
-    m_Image: {fileID: -440750813802333266, guid: 0000000000000000d000000000000000, type: 0}
+    m_Image: {fileID: -2667387946076563598, guid: 0000000000000000d000000000000000, type: 0}
     m_Tooltip: 
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:

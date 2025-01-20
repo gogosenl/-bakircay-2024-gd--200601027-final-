@@ -128,7 +128,7 @@ public class PlacementPlatform : MonoBehaviour
     private void ShuffleAllItems()
     {
         MovableItem[] allItems = FindObjectsOfType<MovableItem>();
-        Vector3 center = new Vector3(-2f, 0f, -3f);
+        Vector3 center = new Vector3(1f, 0f, -1f);
         float radius = 1.5f;
 
         for (int i = 0; i < allItems.Length; i++)
