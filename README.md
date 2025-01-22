@@ -1,6 +1,5 @@
 WEBGL linki:
-https://play.unity.com/en/games/e41649dc-10f8-4104-814c-f1218bc2570a/gorkem-senol
-
+https://play.unity.com/en/games/1d369775-9ebe-4946-a820-2bf597d49967/gorkem-senol
 
 
 # Oyun Mekanikleri ve Kurallar
